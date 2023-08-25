@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import {
   Row,
   Col,
@@ -10,10 +10,19 @@ import {
   Form,
 } from 'react-bootstrap';
 import Rating from '../components/Rating';
-import products from '../products';
+import axios from 'axios';
 
-function ProductScreen({ match, history }) {
-  const product = products.find((p) => p._id == match.params.id);
+function ProductScreen() {
+  const { id } = useParams();
+  const [product, setProduct] = useState([]);
+  useEffect(() => {
+    async function fetchProducts() {
+      const { data } = await axios.get(`/api/product/${id}`);
+      setProduct(data);
+    }
+
+    fetchProducts();
+  }, [id]);
 
   return (
     <div>
